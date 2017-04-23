@@ -111,6 +111,7 @@
 				448357231EACE32B00B6AFD4 /* Frameworks */,
 				448357241EACE32B00B6AFD4 /* Headers */,
 				448357251EACE32B00B6AFD4 /* Resources */,
+				44E6B1201EACE63C00B4D18A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -196,6 +197,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		44E6B1201EACE63C00B4D18A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "exec > /tmp/${PROJECT_NAME}_archive.log 2>&1\n\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\nif [ \"true\" == ${ALREADYINVOKED:-false} ]\nthen\necho \"RECURSION: Detected, stopping\"\nelse\nexport ALREADYINVOKED=\"true\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\necho \"Building for iPhoneSimulator\"\nxcodebuild -workspace \"${WORKSPACE_PATH}\" -scheme \"${TARGET_NAME}\" -configuration ${CONFIGURATION} -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6' ONLY_ACTIVE_ARCH=NO ARCHS='i386 x86_64' BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" ENABLE_BITCODE=YES OTHER_CFLAGS=\"-fembed-bitcode\" BITCODE_GENERATION_MODE=bitcode clean build\n\n# Step 1. Copy the framework structure (from iphoneos build) to the universal folder\necho \"Copying to output folder\"\ncp -R \"${ARCHIVE_PRODUCTS_PATH}${INSTALL_PATH}/${FULL_PRODUCT_NAME}\" \"${UNIVERSAL_OUTPUTFOLDER}/\"\n\n# Step 2. Copy Swift modules from iphonesimulator build (if it exists) to the copied framework directory\nSIMULATOR_SWIFT_MODULES_DIR=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${TARGET_NAME}.framework/Modules/${TARGET_NAME}.swiftmodule/.\"\nif [ -d \"${SIMULATOR_SWIFT_MODULES_DIR}\" ]; then\ncp -R \"${SIMULATOR_SWIFT_MODULES_DIR}\" \"${UNIVERSAL_OUTPUTFOLDER}/${TARGET_NAME}.framework/Modules/${TARGET_NAME}.swiftmodule\"\nfi\n\n# Step 3. Create universal binary file using lipo and place the combined executable in the copied framework directory\necho \"Combining executables\"\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/${EXECUTABLE_PATH}\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${EXECUTABLE_PATH}\" \"${ARCHIVE_PRODUCTS_PATH}${INSTALL_PATH}/${EXECUTABLE_PATH}\"\n\n# Step 4. Create universal binaries for embedded frameworks\n#for SUB_FRAMEWORK in $( ls \"${UNIVERSAL_OUTPUTFOLDER}/${TARGET_NAME}.framework/Frameworks\" ); do\n#BINARY_NAME=\"${SUB_FRAMEWORK%.*}\"\n#lipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/${TARGET_NAME}.framework/Frameworks/${SUB_FRAMEWORK}/${BINARY_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${SUB_FRAMEWORK}/${BINARY_NAME}\" \"${ARCHIVE_PRODUCTS_PATH}${INSTALL_PATH}/${TARGET_NAME}.framework/Frameworks/${SUB_FRAMEWORK}/${BINARY_NAME}\"\n#done\n\n# Step 5. Convenience step to copy the framework to the project's directory\necho \"Copying to project dir\"\nyes | cp -Rf \"${UNIVERSAL_OUTPUTFOLDER}/${FULL_PRODUCT_NAME}\" \"${PROJECT_DIR}\"\n\nopen \"${PROJECT_DIR}\"\n\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		448357221EACE32B00B6AFD4 /* Sources */ = {
@@ -341,7 +358,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.framework.UIExtensions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -362,7 +379,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.framework.UIExtensions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -412,6 +429,7 @@
 				4483573D1EACE32B00B6AFD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4483573E1EACE32B00B6AFD4 /* Build configuration list for PBXNativeTarget "UIExtensionsTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +438,7 @@
 				448357401EACE32B00B6AFD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
