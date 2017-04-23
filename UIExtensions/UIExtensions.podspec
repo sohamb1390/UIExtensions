@@ -24,7 +24,8 @@ Pod::Spec.new do |s|
   #   * Try to keep it short, snappy and to the point.
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
-  s.description  = "All UI related Custom Extension for iOS"
+
+  s.description  = "Extensions of all custom UI for iOS, i.e UIView, UIViewController, UINavigationController, UIImageView, UIButton"
 
   s.homepage     = "https://github.com/sohamb1390/UIExtensions"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
@@ -37,7 +38,7 @@ Pod::Spec.new do |s|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  s.license      = "Apache License 2.0"
+  s.license      = "Apache License, Version 2.0"
   # s.license      = { :type => "Apache", :file => "FILE_LICENSE" }
 
 
@@ -78,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/sohamb1390/UIExtensions.git", :tag => "1.0.0" }
+  s.source       = { :git => "https://github.com/sohamb1390/UIExtensions.git", :tag => "V1.0.0" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
