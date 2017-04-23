@@ -79,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/sohamb1390/UIExtensions.git", :tag => "Dev" }
+  s.source       = { :git => "https://github.com/sohamb1390/UIExtensions.git", :tag => "V1.0.0" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
